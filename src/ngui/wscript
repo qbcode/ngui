@@ -1,0 +1,42 @@
+def try_git_version():
+    import os
+    import sys
+
+    version = None
+    try:
+        #version = os.popen('git describe --always --dirty --long').read().strip().strip("v")
+		version = os.popen('./build-aux/git-version-gen .tarball-version').read()
+    except Exception as e:
+        print e
+    return version
+
+# the following two variables are used by the target "waf dist"
+APPNAME="ngui"
+VERSION = try_git_version()
+
+def options(opt):
+	opt.load('compiler_cxx compiler_c boost gnu_dirs')
+				  
+def configure(conf):
+	conf.load('compiler_cxx compiler_c boost gnu_dirs')
+	conf.check_cfg( package='sdl2', uselib_store='SDL2', args=['--cflags', '--libs'], atleast_version='2.0' )
+
+def build(bld):
+	bld(includes        = '. src',
+		export_includes = '. src',
+		name            = 'ngui_com_includes')
+
+	bld.install_files('${INCLUDEDIR}'  + '/' + APPNAME, bld.path.ant_glob(['*.h']),
+		relative_trick=True, cwd=bld.path.find_node('include'))
+
+	bld(features='cxx cxxstlib',
+		source='ngui_button.cpp ngui.cpp ngui_flowbox.cpp ngui_info_prompt.cpp ngui_scrollbar.cpp ngui_stringselect.cpp ngui_textbox.cpp ngui_textlabel.cpp nsdl.cpp nunifont.cpp',
+		target='ngui',
+		vnum='0.0.0',
+		use='ngui_com_includes SDL2',
+		install_path='${LIBDIR}')
+
+	bld(features="subst",
+		source="libngui.pc.in",
+		target="libngui.pc",
+		install_path="${LIBDIR}/pkgconfig")

@@ -6,7 +6,7 @@ libdir=@libdir@
 Name: ngui
 Description: ngui
 URL: https://github.com/new299/ngui
-Version: @PACKAGE_VERSION@
+Version: @VERSION@
 Cflags: -I${includedir}
 Libs: -L${libdir} -lngui
 Libs.private: @sdl2_LIBS@
