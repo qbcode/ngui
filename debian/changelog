@@ -1,10 +1,10 @@
-ngui (2014.07-22-3-d26d-dirty) unstable; urgency=low
+ngui (20141107-dirty) unstable; urgency=low
 
   * New upstream version.
 
  -- Nava Whiteford <new299@sgenomics.org>  Tue, 22 Jul 2014 10:17:27 +0000
 
-ngui (2014.07-22-3-d26d-dirty-1) unstable; urgency=low
+ngui (20140722) unstable; urgency=low
 
   * Initial release (Closes: #nnnn)  <nnnn is the bug number of your ITP>
 

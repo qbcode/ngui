@@ -1,4 +1,8 @@
 #!/bin/bash
+
+VERSION=$(./build-aux/git-version-gen .tarball-version)
+PACKAGE_NAME=ngui_${VERSION}
+
 case $1 in
 patch)
     ;;
@@ -7,22 +11,31 @@ install_deps)
     git submodule update
     ;;
 configure)
-    ./autogen.sh
-    ./configure --enable-deb=yes
+    ./waf configure
+    #./waf configure --with-coverage
     ;;
 compile)
-    make -j 4
+    ./waf build --notests
     ;;
 check)
-    make check
-    #make distcheck
+    ./waf --alltests
+    #./waf --lcov-report
+    #sh -x ./src/test/coverage.sh -d build/src -o build/check-coverage ./waf --alltests
     ;;
 package)
-    make deb -j 4
+    ./build-aux/git-version-gen .tarball-version > .tarball-version
+    git archive --format tar.gz -9 --prefix=${PACKAGE_NAME}/ HEAD > ${PACKAGE_NAME}.tar.gz
+    tar zxf ${PACKAGE_NAME}.tar.gz && \
+        cp .tarball-version ${PACKAGE_NAME}/.tarball-version && \
+        cp -a ${PACKAGE_NAME} ${PACKAGE_NAME}.orig && \
+        cd ${PACKAGE_NAME} && \
+        ./build-aux/update-debian-changelog debian/changelog $(cat .tarball-version) && \
+        debuild -us -uc -sa
     ;;
 upload)
     ;;
 compile_extra)
+    #ldd build/src/qbdevice/qbdevice
     ;;
 uninstall_deps)
     ;;

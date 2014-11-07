@@ -1,0 +1,17 @@
+def build(bld):
+	bld(
+		includes        = '. include include/gtest include/gmock',
+		export_includes = '. include include/gtest include/gmock',
+		name            = 'gmock_includes')
+
+	bld.stlib(
+		source='src/gmock-gtest-all.cc',
+		target='libgmock',
+		vnum='0.0.0',
+		use='Z PTHREAD gmock_includes')
+
+	bld.stlib(
+		source='src/gmock_main.cc',
+		target='libgmock_main',
+		vnum='0.0.0',
+		use='Z PTHREAD gmock_includes')

@@ -5,4 +5,7 @@ export DH_VERBOSE=1
 DEB_DH_SHLIBDEPS_ARGS_ALL := --dpkg-shlibdeps-params=--ignore-missing-info
 
 include /usr/share/cdbs/1/rules/debhelper.mk
-include /usr/share/cdbs/1/class/autotools.mk
+include /usr/share/cdbs/1/class/waf.mk
+
+#build/qbdevice-doc::
+#	$(MAKE) -C docs html
